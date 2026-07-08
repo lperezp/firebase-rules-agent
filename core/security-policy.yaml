@@ -1,0 +1,7 @@
+compliance:
+  - id: "enforce-auth"
+    rule: "request.auth != null"
+    description: "Todas las colecciones deben requerir autenticación."
+  - id: "deny-public-write"
+    rule: "allow write: if false"
+    description: "Prohibida la escritura pública por defecto."

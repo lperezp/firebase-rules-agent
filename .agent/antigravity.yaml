@@ -1,0 +1,10 @@
+compliance:
+  - id: "must-have-auth"
+    rule: "request.auth != null"
+    severity: "CRITICAL"
+  - id: "no-public-write"
+    rule: "allow write: if false"
+    severity: "HIGH"
+workspace:
+  report_path: "/Users/LuisPerez/Documents/firebase-rules-agent/reports/"
+  auto_export_artifacts: true
