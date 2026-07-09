@@ -1,4 +1,4 @@
-# Firebase Rules Agent (Governance Hub)
+# Firebase Rules Agent
 
 An intelligent orchestration engine designed for scale-grade security governance of Firebase security rules. Utilizing the **Antigravity CLI (agy)** as its reasoning core, this hub automates the extraction, sanitization, and security auditing of Firebase Rules (both **Cloud Firestore** and **Cloud Storage**) across target repositories.
 
