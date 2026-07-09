@@ -13,9 +13,9 @@ npx ts-node scripts/automate-audit.ts "$TARGET_PROJECT"
 
 # 2. Lanzar análisis con contexto unificado
 echo "🛡️ Iniciando análisis de arquitectura..."
-agy run "Como experto en seguridad Firebase, audita los archivos en 'audit_sandbox/', los cuales corresponden al proyecto en '$TARGET_PROJECT'. 
+agy --prompt-interactive "Como experto en seguridad Firebase, audita los archivos en 'audit_sandbox/', los cuales corresponden al proyecto en '$TARGET_PROJECT'. 
 Objetivo: Validar el cumplimiento de 'Least Privilege'.
-Formato de salida: Genera un reporte detallado unificado en '$REPORT_NAME' que contenga:
+Formato de salida: Guarda el reporte detallado unificado exactamente en el archivo '$REPORT_NAME'. Si generas un archivo de evaluación JSON, guárdalo exactamente en 'reports/security_audit_$DATE.json'. No utilices ningún otro nombre de archivo. El reporte debe contener:
 1) Tabla de resumen (Estatus de Firestore y Storage).
 2) Análisis detallado por colección/ruta.
 3) Bloques de código con la remediación sugerida para cada hallazgo.
