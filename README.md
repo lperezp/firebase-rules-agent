@@ -25,10 +25,15 @@ graph TD
 
 ## ⚙️ Operation Flow
 
-1.  **Orchestration Input:** The user runs [run.sh](run.sh) specifying the path of a target project:
-    ```bash
-    ./run.sh ../my-firebase-project
-    ```
+1.  **Orchestration Input:** The user runs [run.sh](run.sh) specifying either a path to a local target project, or the `--live` flag with a Firebase Project ID:
+    *   **Local Project:**
+        ```bash
+        ./run.sh ../my-firebase-project
+        ```
+    *   **Live Firebase Project (downloads rules via MCP using .firebaserc):**
+        ```bash
+        ./run.sh ../my-firebase-project --live
+        ```
 2.  **Sandbox Isolation:** The sanitization script extracts rules (`firestore.rules` and `storage.rules`) from the target project, removes comments/sensitive notes, and writes them respectively as:
     *   `audit_sandbox/firestore_rules_check.txt`
     *   `audit_sandbox/storage_rules_check.txt`
@@ -83,10 +88,15 @@ npm install
 Edit [.agent/antigravity.yaml](.agent/antigravity.yaml) to customize your corporate governance rules.
 
 ### 3. Run the Audit
-Trigger the governance check on any target directory containing Firebase configuration:
-```bash
-./run.sh ../my-firebase-project
-```
+Trigger the governance check locally or download them directly from the cloud:
+*   **Local Audit:**
+    ```bash
+    ./run.sh /ruta/a/tu/proyecto-objetivo
+    ```
+*   **Live Cloud Audit (via MCP using .firebaserc):**
+    ```bash
+    ./run.sh /ruta/a/tu/proyecto-objetivo --live
+    ```
 
 ### 4. Read the Results
 The final results are exported directly into the `reports/` folder. Files are automatically ignored in Git to prevent polluting your codebase history.
