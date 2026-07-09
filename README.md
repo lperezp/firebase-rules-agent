@@ -13,12 +13,11 @@ graph TD
     A[Target Project] -->|run.sh| B[scripts/automate-audit.ts]
     B -->|Sanitized Rules| C[audit_sandbox/]
     C -->|Analyze| D[Antigravity CLI - agy]
-    D -->|Security Policies| E[.agent/antigravity.yaml]
     D -->|Generate| F[reports/audit_*/]
 ```
 
-*   **Brain (Governance Hub):** Contains security compliance policies ([.agent/antigravity.yaml](.agent/antigravity.yaml)) and orchestrates the AI reasoning loop.
 *   **Sandbox (Clean & Copy):** Uses [scripts/automate-audit.ts](scripts/automate-audit.ts) to read, sanitize, and isolate rule files before sending them to the model, preventing leaks of sensitive comments or private paths.
+*   **Orchestration & Reasoning:** Uses `run.sh` and the Antigravity CLI (`agy`) to run security rules audits using the AI's general reasoning loop and Firebase MCP tools.
 *   **Reports:** Writes detailed compliance reviews and assessment files inside a timestamped folder: `reports/audit_YYYY-MM-DD_HH-MM-SS/`.
 
 ---
@@ -37,34 +36,17 @@ graph TD
 2.  **Sandbox Isolation:** The sanitization script extracts rules (`firestore.rules` and `storage.rules`) from the target project, removes comments/sensitive notes, and writes them respectively as:
     *   `audit_sandbox/firestore_rules_check.txt`
     *   `audit_sandbox/storage_rules_check.txt`
-3.  **Governance Reasoning:** The Antigravity agent CLI is launched with a security architect persona. It audits the rules against defined policies.
+3.  **Governance Reasoning:** The Antigravity agent CLI is launched with a security architect persona. It audits the rules using the model's expert security reasoning.
 4.  **Reporting:** A markdown report is generated containing executive tables, route-level vulnerabilities, and copy-pasteable remediation code blocks.
 
 ---
 
-## 🛠️ Security Policies
 
-Policies are defined under [.agent/antigravity.yaml](.agent/antigravity.yaml):
-
-```yaml
-compliance:
-  - id: "must-have-auth"
-    rule: "request.auth != null"
-    severity: "CRITICAL"
-  - id: "no-public-write"
-    rule: "allow write: if false"
-    severity: "HIGH"
-```
-
-The AI engine uses these definitions to measure compliance, evaluate severity risks, and propose rule adjustments under the principle of **Least Privilege**.
-
----
 
 ## 📦 Project Structure
 
 ```text
 ├── .agent/
-│   ├── antigravity.yaml            # Compliance policies configuration
 │   └── mcp_config.json             # Firebase MCP server configuration
 ├── scripts/
 │   └── automate-audit.ts           # Rules sanitizer and sandbox exporter
@@ -96,10 +78,7 @@ Initialize node packages in the hub root:
 npm install
 ```
 
-### 2. Configure Compliance
-Edit [.agent/antigravity.yaml](.agent/antigravity.yaml) to customize your corporate governance rules (e.g. strict authentication, least privilege validation).
-
-### 3. Run the Audit
+### 2. Run the Audit
 Trigger the governance check on a local directory, or pull and audit live rules directly from the cloud:
 
 *   **Option A: Local Audit (Static Files)**
@@ -113,7 +92,7 @@ Trigger the governance check on a local directory, or pull and audit live rules 
     ./run.sh /path/to/your/firebase-project --live
     ```
 
-### 4. Read the Results
+### 3. Read the Results
 Each audit run creates a dedicated, timestamped folder inside the `reports/` directory to prevent files from being overwritten:
 ```text
 reports/
