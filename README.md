@@ -14,18 +14,18 @@ graph TD
     B -->|Sanitized Rules| C[audit_sandbox/]
     C -->|Analyze| D[Antigravity CLI - agy]
     D -->|Security Policies| E[.agent/antigravity.yaml]
-    D -->|Generate| F[reports/security_audit_*.md]
+    D -->|Generate| F[reports/audit_*/]
 ```
 
-*   **Brain (Governance Hub):** Contains security compliance policies ([.agent/antigravity.yaml](file:///Users/LuisPerez/Documents/firebase-rules-agent/.agent/antigravity.yaml)) and orchestrates the AI reasoning loop.
-*   **Sandbox (Clean & Copy):** Uses [scripts/automate-audit.ts](file:///Users/LuisPerez/Documents/firebase-rules-agent/scripts/automate-audit.ts) to read, sanitize, and isolate rule files before sending them to the model, preventing leaks of sensitive comments or private paths.
-*   **Reports:** Writes detailed compliance reviews with timestamped filenames in `reports/security_audit_YYYY-MM-DD_HH-MM-SS.md`.
+*   **Brain (Governance Hub):** Contains security compliance policies ([.agent/antigravity.yaml](.agent/antigravity.yaml)) and orchestrates the AI reasoning loop.
+*   **Sandbox (Clean & Copy):** Uses [scripts/automate-audit.ts](scripts/automate-audit.ts) to read, sanitize, and isolate rule files before sending them to the model, preventing leaks of sensitive comments or private paths.
+*   **Reports:** Writes detailed compliance reviews and assessment files inside a timestamped folder: `reports/audit_YYYY-MM-DD_HH-MM-SS/`.
 
 ---
 
 ## ⚙️ Operation Flow
 
-1.  **Orchestration Input:** The user runs [run.sh](file:///Users/LuisPerez/Documents/firebase-rules-agent/run.sh) specifying the path of a target project:
+1.  **Orchestration Input:** The user runs [run.sh](run.sh) specifying the path of a target project:
     ```bash
     ./run.sh ../my-firebase-project
     ```
@@ -39,7 +39,7 @@ graph TD
 
 ## 🛠️ Security Policies
 
-Policies are defined under [.agent/antigravity.yaml](file:///Users/LuisPerez/Documents/firebase-rules-agent/.agent/antigravity.yaml):
+Policies are defined under [.agent/antigravity.yaml](.agent/antigravity.yaml):
 
 ```yaml
 compliance:
@@ -80,7 +80,7 @@ npm install
 ```
 
 ### 2. Configure Compliance
-Edit [.agent/antigravity.yaml](file:///Users/LuisPerez/Documents/firebase-rules-agent/.agent/antigravity.yaml) to customize your corporate governance rules.
+Edit [.agent/antigravity.yaml](.agent/antigravity.yaml) to customize your corporate governance rules.
 
 ### 3. Run the Audit
 Trigger the governance check on any target directory containing Firebase configuration:

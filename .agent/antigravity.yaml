@@ -6,5 +6,5 @@ compliance:
     rule: "allow write: if false"
     severity: "HIGH"
 workspace:
-  report_path: "/Users/LuisPerez/Documents/firebase-rules-agent/reports/"
+  report_path: "reports/"
   auto_export_artifacts: true
