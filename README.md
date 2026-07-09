@@ -76,6 +76,18 @@ The AI engine uses these definitions to measure compliance, evaluate severity ri
 
 ---
 
+## 📋 Prerequisites
+
+Before running the agent, make sure you have the following installed and configured:
+1. **Node.js** (v16+) and **npm**.
+2. **Antigravity CLI** (`agy`) installed globally and logged in.
+3. **Firebase CLI** logged in (only required for `--live` cloud audits):
+   ```bash
+   npx firebase login
+   ```
+
+---
+
 ## ⚡ Quick Start
 
 ### 1. Install Dependencies
@@ -85,18 +97,37 @@ npm install
 ```
 
 ### 2. Configure Compliance
-Edit [.agent/antigravity.yaml](.agent/antigravity.yaml) to customize your corporate governance rules.
+Edit [.agent/antigravity.yaml](.agent/antigravity.yaml) to customize your corporate governance rules (e.g. strict authentication, least privilege validation).
 
 ### 3. Run the Audit
-Trigger the governance check locally or download them directly from the cloud:
-*   **Local Audit:**
+Trigger the governance check on a local directory, or pull and audit live rules directly from the cloud:
+
+*   **Option A: Local Audit (Static Files)**
+    Reads local `firestore.rules` and `storage.rules` directly from the project directory:
     ```bash
-    ./run.sh /ruta/a/tu/proyecto-objetivo
+    ./run.sh /path/to/your/firebase-project
     ```
-*   **Live Cloud Audit (via MCP using .firebaserc):**
+*   **Option B: Live Cloud Audit (via MCP)**
+    Extracts the active Firebase Project ID from the target project's `.firebaserc` file, uses the Firebase MCP server to download the live rules, and runs the audit:
     ```bash
-    ./run.sh /ruta/a/tu/proyecto-objetivo --live
+    ./run.sh /path/to/your/firebase-project --live
     ```
 
 ### 4. Read the Results
-The final results are exported directly into the `reports/` folder. Files are automatically ignored in Git to prevent polluting your codebase history.
+Each audit run creates a dedicated, timestamped folder inside the `reports/` directory to prevent files from being overwritten:
+```text
+reports/
+└── audit_YYYY-MM-DD_HH-MM-SS/
+    ├── security_audit_report.md          # Detailed security report in Spanish
+    └── security_audit_assessment.json    # JSON report containing risk score, summary, and key findings
+```
+*Note: The `reports/` and `audit_sandbox/` folders are ignored by git to keep your repository history clean.*
+
+---
+
+## 🔌 Firebase MCP Integration
+
+The live cloud audit utilizes the **Firebase MCP server** defined in [.agent/mcp_config.json](.agent/mcp_config.json):
+* When `--live` is passed, `run.sh` temporarily configures the active environment variables (`GCLOUD_PROJECT` and `FIREBASE_PROJECT`) with the Project ID found in `.firebaserc`.
+* The Antigravity agent CLI calls the `firebase_get_security_rules` MCP tool to pull current live rules directly from Firebase console.
+* The rules are sanitized local sandbox copies (`audit_sandbox/`), preserving data privacy by stripping sensitive local comments before LLM processing.
